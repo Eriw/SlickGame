@@ -8,8 +8,8 @@ public class Game extends StateBasedGame{
    public static final String GAME_NAME = "Game!!";
    public static final int GAME_STATE_MENU = 0;
    public static final int GAME_STATE_PLAY = 1;
-   public static final int WINDOW_WIDTH = 640;
-   public static final int WINDOW_HEIGHT = 480;
+   public static final int WINDOW_WIDTH = 1280;
+   public static final int WINDOW_HEIGHT = 720;
    
    public Game(String gamename){
       super(gamename);
