@@ -5,6 +5,8 @@
 package javagame;
 
 import java.util.ArrayList;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -25,12 +27,13 @@ public class Player {
     private GameContainer gc;
     private Play world;
     private final float PLAYER_HORISONTAL_SPEED = 0.75f;
-    private final float PLAYER_JUMP_SPEED = -10;
-    private final float FRICTION = 0.1f;
+    private final float PLAYER_JUMP_SPEED = -7;
+    private final float FRICTION = 10f;
     private final float GRAVITY = 0.03f;
     public final int MOVING_RIGHT = 1;
     public final int MOVING_LEFT = -1;
     private int direction = MOVING_RIGHT;
+    private int delayNextBullet = 0;
     
     public Player(GameContainer gc, Play play, float x, float y, float width, float height){
         
@@ -43,12 +46,14 @@ public class Player {
     
     public void update(int delta){
     	input();
-    	move(delta);
     	if(velocity.x > 0){
     		direction = MOVING_RIGHT;
     	}else if(velocity.x < 0){
     		direction = MOVING_LEFT;
     	}
+    	if(delayNextBullet > 0) --delayNextBullet;
+
+    	move(delta);
     }
     
     private void input() {
@@ -66,7 +71,10 @@ public class Player {
         }
         
         if( input.isKeyDown(Input.KEY_SPACE)){
-            world.entities.add(new Bullet(gc, world, player.getCenterX() + direction*player.getWidth(), player.getY(), 10, 10, new Vector2f(direction,0)));
+           if(delayNextBullet == 0){
+        	   delayNextBullet = 60;
+        	   world.eh.createBullet(new Vector2f(player.getCenterX() + direction*player.getWidth(),  player.getY()), new Vector2f(direction,0) );
+           }
         }
 		
 	}
@@ -74,13 +82,10 @@ public class Player {
     public void move(int delta){
 		
 		velocity.y += GRAVITY*delta;
-		if(velocity.x > 0) velocity.x -= FRICTION;
-		if(velocity.x < 0) velocity.x += FRICTION;
-		if(velocity.x > -FRICTION && velocity.x < FRICTION) velocity.x = 0;
 			
 		player.setY(player.getY() + velocity.y);
 			
-		 for(Entity e : world.entities){
+		 for(Entity e : world.eh.objects){
 			if(e.getHitbox().getHeight() > 1){
 				if(e.hitbox.intersects(player)){
 					if(player.getCenterY() >= e.getHitbox().getCenterY()){
@@ -106,7 +111,7 @@ public class Player {
 		}
 		
 		boolean intersectsY = false;		
-		for(Entity e : world.entities){
+		for(Entity e : world.eh.objects){
            if(e.entity.intersects(player)){
         	   intersectsY = true;
                
@@ -117,14 +122,14 @@ public class Player {
 		player.setX(player.getX() + delta*velocity.x );
 		
         if(player.getX() < 0){
-           player.setX(0); //dont let him keep going up if he reaches the top
+           player.setX(0);
         }
-        if(player.getMaxX() > WINDOW_WIDTH){
-            player.setX(WINDOW_WIDTH - player.getWidth()); //dont let him keep going up if he reaches the top
+        if(player.getMaxX() > WORLD_WIDTH){
+            player.setX(WORLD_WIDTH - player.getWidth());
         }
         
         
-        for(Entity e : world.entities){
+        for(Entity e : world.eh.objects){
            if(e.entity.intersects(player) && !intersectsY){
         	   if(player.getCenterX() >= e.entity.getCenterX()){
         		   player.setX(e.entity.getMaxX() + 2f);
@@ -134,6 +139,10 @@ public class Player {
                
            }
         }
+        
+        if(velocity.x > 0) velocity.x -= FRICTION;
+		if(velocity.x < 0) velocity.x += FRICTION;
+		if(velocity.x > -FRICTION && velocity.x < FRICTION) velocity.x = 0;
 	        
     	
     	
@@ -141,8 +150,11 @@ public class Player {
     
     public void render(){
         
-        g.draw(player);
-        g.drawString(":)", player.getCenterX()-10, player.getCenterY()-10);
+    	g.setColor(new Color(1.0f, 0.0f, 0.0f));
+        float x0 = player.getX() - world.camera.getPosition();
+        g.drawRect(x0, player.getY(), player.getWidth(), player.getHeight());
+        //g.drawString("Player pos:" + player.getX() + ", " + player.getY(), 10, 70);
+        //g.drawString("x0:" + x0, 10, 50);
         
     }
 
@@ -152,6 +164,10 @@ public class Player {
 
     public float getY() {
         return player.getY();
+    }
+    
+    public float getCenterX(){
+    	return player.getCenterX();
     }
     
 }

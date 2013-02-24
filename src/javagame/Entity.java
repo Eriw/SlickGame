@@ -4,6 +4,7 @@
  */
 package javagame;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -37,7 +38,12 @@ public class Entity {
     }
 
 	public void render(){
-        g.draw(entity);
+		
+		g.setColor(new Color(1.0f, 1.0f, 1.0f));
+		
+        //g.draw(entity);
+        float x0 = entity.getX() - world.camera.getPosition();
+        g.drawRect(x0, entity.getY(), entity.getWidth(), entity.getHeight());
     }
 
     public float getX() {

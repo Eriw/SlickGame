@@ -8,6 +8,7 @@ import static javagame.Game.*;
 public class Bullet extends Entity {
 	
 	private final float PLAYER_HORISONTAL_SPEED = 0.5f;
+	private float timeToLive = 500;
 	
 
 	public Bullet(GameContainer gc, Play play, float x, float y, float width, float height, Vector2f velocity) {
@@ -18,6 +19,11 @@ public class Bullet extends Entity {
 	
 	 public void update(int delta){
 	        move(delta);
+	        timeToLive -= 1f*delta;
+	        if(timeToLive <= 0){
+	        	entity.setX(WORLD_WIDTH*2);
+	        	hitbox.setX(WORLD_WIDTH*2);
+	        }
 	 }
 
 	private void move(int delta) {

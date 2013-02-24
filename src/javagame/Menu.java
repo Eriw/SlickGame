@@ -16,7 +16,7 @@ public class Menu extends BasicGameState{
    
    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException{
        gc.setTargetFrameRate(240);
-       playButton = new Rectangle(WINDOW_WIDTH/2 - WINDOW_WIDTH/6, 200, WINDOW_WIDTH/3, 20);
+       playButton = new Rectangle(WINDOW_WIDTH/2 - WINDOW_WIDTH/6, WINDOW_HEIGHT/2, WINDOW_WIDTH/3, WINDOW_HEIGHT/10);
        exitButton = new Rectangle(playButton.getX(), playButton.getY()+playButton.getHeight()*2, playButton.getWidth(), playButton.getHeight());
    }
    
