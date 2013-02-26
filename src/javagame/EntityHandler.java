@@ -75,6 +75,10 @@ public class EntityHandler {
                 if(map.getColor(x, y).r == 0f && map.getColor(x, y).g == 1f && map.getColor(x, y).b == 0f){
                     createPlatform(new Rectangle(blockWidth*x + blockWidth/10, WINDOW_HEIGHT/map.getHeight()*y + 5f, blockWidth*0.8f, WINDOW_HEIGHT/map.getHeight() - 10f));
                 }
+                if(map.getColor(x, y).r == 0f && map.getColor(x, y).g == 0f && map.getColor(x, y).b == 1f){
+                    createBox(new Rectangle(blockWidth*x + blockWidth/10, WINDOW_HEIGHT/map.getHeight()*y + 5f, blockWidth*0.8f, WINDOW_HEIGHT/map.getHeight() - 10f));
+                    objects.get(objects.size()-1).health = 100f;
+                }
             }
         }
         
@@ -133,12 +137,33 @@ public class EntityHandler {
 
     public void update(int delta){
              for(int i = 0; i < bullets.size(); ++i){
-                       Entity e = bullets.get(i);
-                       e.update(delta);
-                   if(e.getHitbox().getMaxX() < 0 || e.getHitbox().getX() > WORLD_WIDTH || e.getHitbox().getMaxY() < 0 || e.getHitbox().getY() > WINDOW_HEIGHT){
-                     bullets.remove(i);
-                   }
-               }
+                Entity e = bullets.get(i);
+                e.update(delta);
+                if(e.getHitbox().getMaxX() < 0 || e.getHitbox().getX() > WORLD_WIDTH || e.getHitbox().getMaxY() < 0 || e.getHitbox().getY() > WINDOW_HEIGHT){
+                  bullets.remove(i);
+                  return;
+                }
+                
+                for(int j = 0; j < objects.size(); ++j){
+                    
+                    Entity destroyableBox = objects.get(j);
+                    
+                    if(destroyableBox.health <= 200f){
+                        if(destroyableBox.getHitbox().intersects(e.getHitbox())){
+                            destroyableBox.health -= 20f;
+                            if(destroyableBox.health <= 0){
+                                objects.remove(destroyableBox);
+                            }
+                            bullets.remove(i);
+                        }
+                    }
+                    
+                   
+                    
+                }
+            }
+             
+            
     }
 
     public void render(){
