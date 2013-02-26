@@ -34,6 +34,7 @@ public class Player {
     public final int MOVING_LEFT = -1;
     private int direction = MOVING_RIGHT;
     private int delayNextBullet = 0;
+    private boolean drop;
     
     public Player(GameContainer gc, Play play, float x, float y, float width, float height){
         
@@ -42,6 +43,7 @@ public class Player {
         player = new Rectangle(x, y, width, height);
         velocity = new Vector2f(0, 0);
         this.world = play;
+        drop = false;
     }
     
     public void update(int delta){
@@ -69,6 +71,11 @@ public class Player {
         if(input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)){
         	velocity.x = PLAYER_HORISONTAL_SPEED;
         }
+        if(input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)){
+            drop = true;
+        }else{
+            drop = false;
+        }
         
         if( input.isKeyDown(Input.KEY_SPACE)){
            if(delayNextBullet == 0){
@@ -80,46 +87,47 @@ public class Player {
 	}
 
     public void move(int delta){
-		
-		velocity.y += GRAVITY*delta;
-			
-		player.setY(player.getY() + velocity.y);
-			
-		 for(Entity e : world.eh.objects){
-			if(e.getHitbox().getHeight() > 1){
-				if(e.hitbox.intersects(player)){
-					if(player.getCenterY() >= e.getHitbox().getCenterY()){
-						player.setY(e.getHitbox().getMaxY() + 1f);
-						velocity.y = 0.001f;
-					}else{
-						player.setY(e.getHitbox().getY() - player.getHeight() - 0.1f);
-						velocity.y = 0;
-					}
-				}
-			}else if(velocity.y > 0){
-				if(e.hitbox.intersects(player)){
-			        player.setY(e.getY() - player.getHeight() - 0.1f);
-			        velocity.y = 0f;
-			    }
-			}
-		 }
+	
+        velocity.y += GRAVITY*delta;
 
-		
-		if(player.getMaxY() > WINDOW_HEIGHT){
-		    player.setY(WINDOW_HEIGHT - player.getHeight());
-		    velocity.y = 0;
-		}
-		
-		boolean intersectsY = false;		
-		for(Entity e : world.eh.objects){
-           if(e.entity.intersects(player)){
-        	   intersectsY = true;
-               
-           }
+        player.setY(player.getY() + velocity.y);
+
+        for(Entity e : world.eh.objects){
+                if(e.getHitbox().getHeight() > 1){
+                        if(e.hitbox.intersects(player)){
+                                if(player.getCenterY() >= e.getHitbox().getCenterY()){
+                                        player.setY(e.getHitbox().getMaxY() + 1f);
+                                        velocity.y = 0.001f;
+                                }else{
+                                        player.setY(e.getHitbox().getY() - player.getHeight() - 0.1f);
+                                        velocity.y = 0;
+                                }
+                        }
+                }else if(velocity.y > 0 && player.getCenterY() < e.hitbox.getY() && !drop){
+                        if(e.hitbox.intersects(player)){
+                        player.setY(e.getY() - player.getHeight() - 0.1f);
+                        velocity.y = 0f;
+                    }
+                }
+         }
+
+
+        if(player.getMaxY() > WINDOW_HEIGHT){
+           // player.setY(WINDOW_HEIGHT - player.getHeight());
+            player.setY(500f);
+            player.setX(10);
+            velocity.y = 0;
+        }
+
+        boolean intersectsY = false;		
+        for(Entity e : world.eh.objects){
+            if(e.entity.intersects(player)){
+                    intersectsY = true;
+
+            }
         }
 		
-		
-		player.setX(player.getX() + delta*velocity.x );
+        player.setX(player.getX() + delta*velocity.x );
 		
         if(player.getX() < 0){
            player.setX(0);
@@ -130,7 +138,7 @@ public class Player {
         
         
         for(Entity e : world.eh.objects){
-           if(e.entity.intersects(player) && !intersectsY){
+           if(e.entity.intersects(player) && !intersectsY ){
         	   if(player.getCenterX() >= e.entity.getCenterX()){
         		   player.setX(e.entity.getMaxX() + 2f);
         	   }else{
