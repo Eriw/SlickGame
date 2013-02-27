@@ -83,7 +83,7 @@ public class EntityHandler {
         }
         
         if(map.getWidth() * blockWidth < WORLD_WIDTH){
-            createBox(new Rectangle(map.getWidth() * blockWidth + blockWidth/10, 0, blockWidth*0.8f, WINDOW_HEIGHT));
+            createBox(new Rectangle(map.getWidth() * blockWidth + blockWidth/10, WINDOW_HEIGHT - 15, WORLD_WIDTH, 10));
         }
     }
 

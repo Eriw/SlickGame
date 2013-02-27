@@ -11,6 +11,7 @@ public class Game extends StateBasedGame{
    public static final int WINDOW_WIDTH = 1280;
    public static final int WINDOW_HEIGHT = 720;
    public static final int WORLD_WIDTH = 1280*8;
+   public static final int GAME_FPS = 240;
    
    public Game(String gamename){
       super(gamename);

@@ -79,7 +79,7 @@ public class Player {
         
         if( input.isKeyDown(Input.KEY_SPACE)){
            if(delayNextBullet == 0){
-        	   delayNextBullet = 60;
+        	   delayNextBullet = 42;
         	   world.eh.createBullet(new Vector2f(player.getCenterX() + direction*player.getWidth(),  player.getY()), new Vector2f(direction,0) );
            }
         }
@@ -90,7 +90,7 @@ public class Player {
 	
         velocity.y += GRAVITY*delta;
 
-        player.setY(player.getY() + velocity.y);
+        player.setY(player.getY() + velocity.y*delta*0.25f);
 
         for(Entity e : world.eh.objects){
                 if(e.getHitbox().getHeight() > 1){
@@ -127,6 +127,7 @@ public class Player {
             }
         }
 		
+        float oldX = player.getX();
         player.setX(player.getX() + delta*velocity.x );
 		
         if(player.getX() < 0){
@@ -138,19 +139,20 @@ public class Player {
         
         
         for(Entity e : world.eh.objects){
-           if(e.entity.intersects(player) && !intersectsY ){
-        	   if(player.getCenterX() >= e.entity.getCenterX()){
+           if(e.entity.intersects(player)){// && !intersectsY ){
+        	   /*if(player.getCenterX() >= e.entity.getCenterX()){
         		   player.setX(e.entity.getMaxX() + 2f);
         	   }else{
         		   player.setX(e.entity.getX() - player.getWidth() - 1f);
-        	   }
-               
+        	   }*/
+                   
+                   player.setX(oldX);
            }
         }
         
         if(velocity.x > 0) velocity.x -= FRICTION;
-		if(velocity.x < 0) velocity.x += FRICTION;
-		if(velocity.x > -FRICTION && velocity.x < FRICTION) velocity.x = 0;
+        if(velocity.x < 0) velocity.x += FRICTION;
+        if(velocity.x > -FRICTION && velocity.x < FRICTION) velocity.x = 0;
 	        
     	
     	
