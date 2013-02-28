@@ -88,8 +88,6 @@ public class Player {
         
          if(Mouse.isButtonDown(0)){
         
-            float xpos = Mouse.getX() + world.camera.getPosition();
-            float ypos = WINDOW_HEIGHT - Mouse.getY();
             
             /*float d = 20f;
             if(Math.abs(xpos - player.getX()) < d) d = 0;
@@ -98,9 +96,38 @@ public class Player {
             player.setX(player.getX() + d);
             
             player.setY(ypos);*/
+        	 
             if(delayNextBullet == 0){
         	   delayNextBullet = 100;
-        	   world.eh.createBullet(new Vector2f(player.getCenterX() + direction*player.getWidth(),  player.getCenterY() - 10f), new Vector2f((xpos - player.getX())/100f,(ypos - player.getY())/100f) );
+        	   
+        	   float mouseX = Mouse.getX() + world.camera.getPosition();
+               float mouseY = WINDOW_HEIGHT - Mouse.getY();
+               
+               	float x0 = player.getX() + player.getWidth()/2;
+			   	float y0 = player.getY() + player.getWidth();
+			   
+			   	float deltaX = mouseX - x0;
+			   	float deltaY = mouseY - y0;
+			   	
+			   	g.drawString("Delta x: " + deltaX + " Delta y: " + deltaY, 10, 150);
+			   	
+			   	float norm = (float)Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+			   	
+			   	deltaX /= norm;
+			   	deltaY /= norm;
+			   	
+			   	System.out.print("Delta x: " + deltaX + " Delta y: " + deltaY + "\n\r");
+			   	
+			   	x0 += deltaX*player.getWidth();
+			   	y0 += deltaY*player.getWidth();
+			   	
+			   	Vector2f pos = new Vector2f(x0,  y0);
+			   	Vector2f dir = new Vector2f(deltaX,deltaY);
+        	   
+			   	world.eh.createBullet(pos, dir);
+			   	
+			   	//velocity.x -= deltaX/5f;
+			   	//velocity.y -= deltaY/5f;
            }
             
         }

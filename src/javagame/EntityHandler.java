@@ -137,25 +137,29 @@ public class EntityHandler {
 
     public void update(int delta){
              for(int i = 0; i < bullets.size(); ++i){
-                Entity e = bullets.get(i);
-                e.update(delta);
-                if(e.getHitbox().getMaxX() < 0 || e.getHitbox().getX() > WORLD_WIDTH || e.getHitbox().getMaxY() < 0 || e.getHitbox().getY() > WINDOW_HEIGHT){
+                Entity bullet = bullets.get(i);
+                bullet.update(delta);
+                if(bullet.getHitbox().getMaxX() < 0 || bullet.getHitbox().getX() > WORLD_WIDTH || bullet.getHitbox().getMaxY() < 0 || bullet.getHitbox().getY() > WINDOW_HEIGHT){
                   bullets.remove(i);
                   return;
                 }
                 
                 for(int j = 0; j < objects.size(); ++j){
                     
-                    Entity destroyableBox = objects.get(j);
+                    Entity e = objects.get(j);
                     
-                    if(destroyableBox.health <= 200f){
-                        if(destroyableBox.getHitbox().intersects(e.getHitbox())){
-                            destroyableBox.health -= 20f;
-                            if(destroyableBox.health <= 0){
-                                objects.remove(destroyableBox);
+                    if(e.health <= 200f){
+                        if(e.getHitbox().intersects(bullet.getHitbox())){
+                            e.health -= 20f;
+                            if(e.health <= 0){
+                                objects.remove(e);
                             }
                             bullets.remove(i);
                         }
+                    }else if(e.getHitbox().getHeight() > 1){
+                    	if(e.getHitbox().intersects(bullet.getHitbox())){
+                    		bullets.remove(i);
+                    	}
                     }
                     
                    
