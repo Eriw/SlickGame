@@ -30,6 +30,9 @@ public class Bullet extends Entity {
 
 		entity.setX(entity.getX() + delta*velocity.x*HORISONTAL_SPEED);
 		hitbox.setX(hitbox.getX() + delta*velocity.x*HORISONTAL_SPEED);
+                
+                entity.setY(entity.getY() + delta*velocity.y*HORISONTAL_SPEED);
+		hitbox.setY(hitbox.getY() + delta*velocity.y*HORISONTAL_SPEED);
 		
 	}
 

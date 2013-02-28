@@ -12,6 +12,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import static javagame.Game.*;
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
@@ -84,6 +85,25 @@ public class Player {
         	   world.eh.createBullet(new Vector2f(player.getCenterX() + direction*player.getWidth(),  player.getCenterY() - 10f), new Vector2f(direction,0) );
            }
         }
+        
+         if(Mouse.isButtonDown(0)){
+        
+            float xpos = Mouse.getX() + world.camera.getPosition();
+            float ypos = WINDOW_HEIGHT - Mouse.getY();
+            
+            /*float d = 20f;
+            if(Math.abs(xpos - player.getX()) < d) d = 0;
+            if(xpos < player.getX()) d = -d;
+            
+            player.setX(player.getX() + d);
+            
+            player.setY(ypos);*/
+            if(delayNextBullet == 0){
+        	   delayNextBullet = 100;
+        	   world.eh.createBullet(new Vector2f(player.getCenterX() + direction*player.getWidth(),  player.getCenterY() - 10f), new Vector2f((xpos - player.getX())/100f,(ypos - player.getY())/100f) );
+           }
+            
+        }
 		
 	}
 
@@ -150,6 +170,7 @@ public class Player {
                    //player.setX(oldX);
            }
         }
+        
         
         if(velocity.x > 0) velocity.x -= FRICTION;
         if(velocity.x < 0) velocity.x += FRICTION;
