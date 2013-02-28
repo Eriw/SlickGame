@@ -1,8 +1,10 @@
-package javagame;
+package entity;
 
 import static javagame.Game.*;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javagame.Play;
 //import org.newdawn.slick.Color;
 
 import org.newdawn.slick.GameContainer;

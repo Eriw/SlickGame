@@ -1,7 +1,8 @@
-package javagame;
+package camera;
 
 //import org.newdawn.slick.GameContainer;
 import static javagame.Game.*;
+import javagame.Play;
 
 public class Camera {
 

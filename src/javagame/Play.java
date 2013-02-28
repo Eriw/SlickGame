@@ -4,6 +4,12 @@ import java.util.ArrayList;
 //import java.util.Random;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+
+import camera.Camera;
+
+import entity.Entity;
+import entity.EntityHandler;
+import entity.Player;
 import static javagame.Game.*;
 
 //import org.newdawn.slick.geom.Rectangle;

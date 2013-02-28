@@ -1,4 +1,6 @@
-package javagame;
+package entity;
+
+import javagame.Play;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Rectangle;
