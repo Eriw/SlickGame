@@ -100,11 +100,11 @@ public class Player {
                                         player.setY(e.getHitbox().getMaxY() + 1f);
                                         velocity.y = 0.001f;
                                 }else{
-                                        player.setY(e.getHitbox().getY() - player.getHeight() - 0.1f);
+                                        player.setY(e.getHitbox().getY() - player.getHeight() - 1f);
                                         velocity.y = 0;
                                 }
                         }
-                }else if(velocity.y > 0 && player.getY() + player.getHeight()*3f/4f < e.hitbox.getY() && !drop){
+                }else if(velocity.y > 0 && player.getY() + player.getHeight()*2f/4f < e.hitbox.getY() && !drop){
                         if(e.hitbox.intersects(player)){
                         player.setY(e.getY() - player.getHeight() - 0.1f);
                         velocity.y = 0f;
@@ -140,7 +140,7 @@ public class Player {
         
         
         for(Entity e : world.eh.objects){
-           if(e.entity.intersects(player) && e.getHitbox().getHeight() > 1){// && !intersectsY ){
+           if(e.entity.intersects(player) && e.getHitbox().getHeight() > 1 && !intersectsY ){
         	   if(player.getCenterX() >= e.entity.getCenterX()){
         		   player.setX(e.entity.getMaxX() + 2f);
         	   }else{
