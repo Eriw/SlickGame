@@ -47,18 +47,19 @@ public class Player {
     }
     
     public void update(int delta){
-    	input();
+    	input(delta);
     	if(velocity.x > 0){
     		direction = MOVING_RIGHT;
     	}else if(velocity.x < 0){
     		direction = MOVING_LEFT;
     	}
-    	if(delayNextBullet > 0) --delayNextBullet;
+    	if(delayNextBullet > 0) delayNextBullet -= delta;
+        if(delayNextBullet < 0) delayNextBullet = 0;
 
     	move(delta);
     }
     
-    private void input() {
+    private void input(int delta) {
     	Input input = gc.getInput();
         
         if( (input.isKeyDown(Input.KEY_W) || input.isKeyDown(Input.KEY_UP)) && velocity.y == 0){
@@ -79,8 +80,8 @@ public class Player {
         
         if( input.isKeyDown(Input.KEY_SPACE)){
            if(delayNextBullet == 0){
-        	   delayNextBullet = 42;
-        	   world.eh.createBullet(new Vector2f(player.getCenterX() + direction*player.getWidth(),  player.getY()), new Vector2f(direction,0) );
+        	   delayNextBullet = 100;
+        	   world.eh.createBullet(new Vector2f(player.getCenterX() + direction*player.getWidth(),  player.getCenterY() - 10f), new Vector2f(direction,0) );
            }
         }
 		
@@ -139,14 +140,14 @@ public class Player {
         
         
         for(Entity e : world.eh.objects){
-           if(e.entity.intersects(player)){// && !intersectsY ){
-        	   /*if(player.getCenterX() >= e.entity.getCenterX()){
+           if(e.entity.intersects(player) && e.getHitbox().getHeight() > 1){// && !intersectsY ){
+        	   if(player.getCenterX() >= e.entity.getCenterX()){
         		   player.setX(e.entity.getMaxX() + 2f);
         	   }else{
         		   player.setX(e.entity.getX() - player.getWidth() - 1f);
-        	   }*/
+        	   }
                    
-                   player.setX(oldX);
+                   //player.setX(oldX);
            }
         }
         

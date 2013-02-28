@@ -19,7 +19,7 @@ public class Play extends BasicGameState{
    }
    
    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException{
-       player = new Player(gc, this,10,300,20,20);
+       player = new Player(gc, this,10,300,40,90);
        entities = new ArrayList<Entity>();
        eh = new EntityHandler(gc, this);
        eh.init();
